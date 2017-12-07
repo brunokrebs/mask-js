@@ -7,8 +7,14 @@ const ALPHANUM = 'S';
 function jsMasker(mask: string, value: string): string {
     const availableSpaces = mask.replace(/\W/g, '');
     const completeInput = availableSpaces.length === value.length;
-    mask.split('').map(char => {
-       console.log(char);
+    const maskArray = mask.split('');
+    const maskedValue = maskArray;
+    let nextElement = 0;
+    maskArray.map((char, index) => {
+        if (char === DIGIT && value[nextElement].match(/[0-9]/)) {
+            maskedValue[index] = value[nextElement];
+            nextElement++;
+        }
     });
-    return value;
+    return maskedValue.join("");
 }
