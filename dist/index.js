@@ -1,17 +1,37 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = maskJs;
 var DIGIT = '9';
 var OPTIONAL = '?';
+function maskCurrency(value, decimalSeparator) {
+    if (decimalSeparator === void 0) { decimalSeparator = '.'; }
+    var thousandsSeparator = decimalSeparator == '.' ? ',' : '.';
+    value = value || '';
+    var justNumbers = value.replace(/\D/g, '');
+    var reversedArray = justNumbers.split('').reverse();
+    var result = '';
+    reversedArray.map(function (char, index) {
+        if (index == 2) {
+            result = decimalSeparator + result;
+        }
+        else if (index >= 5 && (index + 1) % 3 === 0) {
+            result = thousandsSeparator + result;
+        }
+        result = char + result;
+    });
+    return result;
+}
+exports.maskCurrency = maskCurrency;
 function maskJs(mask, value) {
-    var inputArray = value.split('') || [];
+    value = value || '';
+    var inputArray = value.split('');
     var digitsEntered = inputArray
         .map(function (char, index) { return (isNumber(char) ? 1 : 0); })
         .reduce(function (prev, next) { return (prev + next); }, 0);
     if (digitsEntered == 0)
         return '';
     var inputLength = value.length;
-    var maskArray = mask.split('') || [];
+    mask = mask || '';
+    var maskArray = mask.split('');
     var indexes = maskArray.map(function (char, index) { return (char === OPTIONAL ? index : ''); }).filter(String);
     // counts 9s in the mask
     var digitPlaces = maskArray
@@ -52,6 +72,7 @@ function maskJs(mask, value) {
     });
     return maskedValue.join("");
 } // preceeded by optional
+exports.maskJs = maskJs;
 function isNumber(value) {
     return value && value.match(/[0-9]/) != null;
 }
