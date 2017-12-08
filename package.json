@@ -7,8 +7,21 @@
     "test": "tests"
   },
   "scripts": {
-    "test": "mocha -r ts-node/register tests/**/*.spec.ts",
+    "test": "mocha -r ts-node/register -r source-map-support/register tests/**/*.spec.ts",
     "prepublishOnly": "tsc -p ./ --outDir dist/"
+  },
+  "nyc": {
+    "extension": [
+      ".ts",
+      ".tsx"
+    ],
+    "include": [
+      "src/**/*.ts"
+    ],
+    "reporter": [
+      "html"
+    ],
+    "all": true
   },
   "repository": {
     "type": "git",
