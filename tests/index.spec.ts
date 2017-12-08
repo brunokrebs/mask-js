@@ -34,6 +34,11 @@ describe('maskJs', () => {
 
   it('should be able to apply more complex masks', function () {
     chai.expect(maskJs('(99) 9999', '777777')).to.equal('(77) 7777');
+    chai.expect(maskJs('(99) 9999?9-9999', '12345678')).to.equal('(12) 3456-78');
+    chai.expect(maskJs('(99) 9999?9-9999', '1234567')).to.equal('(12) 3456-7');
+    chai.expect(maskJs('(9)9?9-9', '(0)12-3')).to.equal('(0)12-3');
+    chai.expect(maskJs('(99) 9999?9-9999', '(12) 3456-78')).to.equal('(12) 3456-78');
+
     chai.expect(maskJs('(99) 9999-9999', '1234567890')).to.equal('(12) 3456-7890');
     chai.expect(maskJs('(99) 99999-9999', '12345678901')).to.equal('(12) 34567-8901');
   });

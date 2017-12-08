@@ -5,7 +5,7 @@ export {
 const DIGIT = '9';
 const OPTIONAL = '?';
 
-function maskCurrency(value: string, decimalSeparator = '.') {
+function maskCurrency(value: string, decimalSeparator = '.'): string {
   const thousandsSeparator = decimalSeparator == '.' ? ',' : '.';
   value = value || '';
   const justNumbers = value.replace(/\D/g,'');
@@ -23,14 +23,15 @@ function maskCurrency(value: string, decimalSeparator = '.') {
 }
 
 function maskJs(mask: string, value: string): string {
-  value = value || '';
-  const inputArray = value.split('');
+  value = (value || '');
+  const justNumbers = value.replace(/\D/g,'');
+  const inputArray = justNumbers.split('');
   const digitsEntered = inputArray
     .map((char, index) => (isNumber(char) ? 1 : 0))
     .reduce((prev, next) => (prev + next), 0);
   if (digitsEntered == 0) return '';
 
-  const inputLength = value.length;
+  const inputLength = justNumbers.length;
   mask = mask || '';
   const maskArray = mask.split('');
   const indexes = maskArray.map((char, index) => (char === OPTIONAL ? index : '')).filter(String);
@@ -58,16 +59,16 @@ function maskJs(mask: string, value: string): string {
       return;
     }
     if (char === DIGIT && inputLength > nextElement) {
-      const isNum = isNumber(value[nextElement]);
+      const isNum = isNumber(justNumbers[nextElement]);
       if (isNum) {
-        maskedValue[index] = value[nextElement];
+        maskedValue[index] = justNumbers[nextElement];
         nextElement++;
         return;
       }
-      while (inputLength > nextElement && !isNumber(value[nextElement])) {
+      while (inputLength > nextElement && !isNumber(justNumbers[nextElement])) {
         nextElement++;
       }
-      maskedValue[index] = isNumber(value[nextElement]) ? value[nextElement] : '';
+      maskedValue[index] = isNumber(justNumbers[nextElement]) ? justNumbers[nextElement] : '';
       nextElement++;
     } else if (inputLength <= nextElement) {
       maskedValue[index] = '';
