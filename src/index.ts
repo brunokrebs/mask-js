@@ -1,9 +1,9 @@
-export default jsMasker;
+export default maskJs;
 
 const DIGIT = '9';
 const OPTIONAL = '?';
 
-function jsMasker(mask: string, value: string): string {
+function maskJs(mask: string, value: string): string {
   const inputArray = value.split('') || [];
   const digitsEntered = inputArray
     .map((char, index) => (isNumber(char) ? 1 : 0))
