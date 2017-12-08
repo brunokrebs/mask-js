@@ -7,7 +7,7 @@
     "test": "tests"
   },
   "scripts": {
-    "test": "mocha -r ts-node/register -r source-map-support/register tests/**/*.spec.ts",
+    "test": "nyc mocha -r ts-node/register -r source-map-support/register tests/**/*.spec.ts",
     "prepublishOnly": "tsc -p ./ --outDir dist/"
   },
   "nyc": {
