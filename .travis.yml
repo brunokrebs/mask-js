@@ -1,0 +1,15 @@
+language: node_js
+node_js:
+- node
+- '6'
+- '4'
+- '3'
+after_success: codecov
+deploy:
+  provider: npm
+  email: krebs.bruno@gmail.com
+  api_key:
+    secure: mKcHeI+YUGrp7T4pTyXfb+X7iGEPdBDJzVeoYS4hlIa9FIr9WNg4QQCMSpIVWKzecHIwXp7FOzCdhiP1rIq4JX8IBkbQ4ea9UtMYjLxgHOc/neHgir0V/IdkWwF2UhVxW59psOzReLpB5Cu8DR/yxF8fsScli1FUQ+58VEPMXhT3x9EoxjZKGwD4kjolajjQpbT5c0Tj1uVyeJNe+yD8Se6CR1Ju/ECNs/eLBpD+j9hmAgbXmDZDOEMuUmhq1UD2bzolkzf5il0K/e+lvOZLP3W9gbc86WB+Btbr/gpZjvarrFNaRKSkX7EKZrjZFhNvx8LQmOEk9M++9RU7AXTK86dvpCW/ba83Qkz1wqXWWCYa8KsRzDEZqstmGbT9bAetpoXrL5lMSzPeTNgeG9ZMf1gJY2XitPI8V99zF6FKl1F/UTc4lZj6Nuh3y593jYulMD4EJlamQlQhzIsCWKJ5GpQ2FnonLEMtBkGYQFys5DurvaF3PI7Da7HvAHcORewVNi23+t6nwnsNz8PCPKYreJRe7aav9jRVOoocGUSN29bs7oWGYMauRF2zOOd9hTaRWsBpE7J11MFmbg3CqQlEgOTNdpYzwQWBcGu+Rdmy501hv2S3uXPcq1j3Oe3Ahpo2OLu9MTbfu+C4WrN/ZkM/Q+KhnTnB8zdGNGkuTpkGews=
+  on:
+    tags: true
+    repo: brunokrebs/auth0-web
