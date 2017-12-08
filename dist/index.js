@@ -22,14 +22,15 @@ function maskCurrency(value, decimalSeparator) {
 }
 exports.maskCurrency = maskCurrency;
 function maskJs(mask, value) {
-    value = value || '';
-    var inputArray = value.split('');
+    value = (value || '');
+    var justNumbers = value.replace(/\D/g, '');
+    var inputArray = justNumbers.split('');
     var digitsEntered = inputArray
         .map(function (char, index) { return (isNumber(char) ? 1 : 0); })
         .reduce(function (prev, next) { return (prev + next); }, 0);
     if (digitsEntered == 0)
         return '';
-    var inputLength = value.length;
+    var inputLength = justNumbers.length;
     mask = mask || '';
     var maskArray = mask.split('');
     var indexes = maskArray.map(function (char, index) { return (char === OPTIONAL ? index : ''); }).filter(String);
@@ -54,16 +55,16 @@ function maskJs(mask, value) {
             return;
         }
         if (char === DIGIT && inputLength > nextElement) {
-            var isNum = isNumber(value[nextElement]);
+            var isNum = isNumber(justNumbers[nextElement]);
             if (isNum) {
-                maskedValue[index] = value[nextElement];
+                maskedValue[index] = justNumbers[nextElement];
                 nextElement++;
                 return;
             }
-            while (inputLength > nextElement && !isNumber(value[nextElement])) {
+            while (inputLength > nextElement && !isNumber(justNumbers[nextElement])) {
                 nextElement++;
             }
-            maskedValue[index] = isNumber(value[nextElement]) ? value[nextElement] : '';
+            maskedValue[index] = isNumber(justNumbers[nextElement]) ? justNumbers[nextElement] : '';
             nextElement++;
         }
         else if (inputLength <= nextElement) {
