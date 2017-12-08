@@ -4,6 +4,12 @@ const DIGIT = '9';
 const OPTIONAL = '?';
 
 function jsMasker(mask: string, value: string): string {
+    const inputArray = value.split('') || [];
+    const digitsEntered = inputArray
+        .map((char, index) => (isNumber(char) ? 1 : 0))
+        .reduce((prev, next) => (prev + next), 0);
+    if (digitsEntered == 0) return '';
+
     const inputLength = value.length;
     const maskArray = mask.split('') || [];
     const indexes = maskArray.map((char, index) => (char === OPTIONAL ? index : '')).filter(String);
@@ -12,7 +18,7 @@ function jsMasker(mask: string, value: string): string {
     const digitPlaces = maskArray
         .map((char, index) => (char === DIGIT ? 1 : 0))
         .reduce((prev, next) => (prev + next), 0);
-    const maskLength = maskArray.length - indexes.length;
+
     const maskedValue = maskArray;
 
     let nextElement = 0;
@@ -30,8 +36,17 @@ function jsMasker(mask: string, value: string): string {
             maskedValue[index] = '';
             return;
         }
-        if (char === DIGIT && inputLength > nextElement && isNumber(value[nextElement])) {
-            maskedValue[index] = value[nextElement];
+        if (char === DIGIT && inputLength > nextElement) {
+            const isNum = isNumber(value[nextElement]);
+            if (isNum) {
+                maskedValue[index] = value[nextElement];
+                nextElement++;
+                return;
+            }
+            while (inputLength > nextElement && !isNumber(value[nextElement])) {
+                nextElement++;
+            }
+            maskedValue[index] = isNumber(value[nextElement]) ? value[nextElement] : '';
             nextElement++;
         } else if (inputLength <= nextElement) {
             maskedValue[index] = '';
@@ -41,5 +56,5 @@ function jsMasker(mask: string, value: string): string {
 } // preceeded by optional
 
 function isNumber(value) {
-    return value.match(/[0-9]/);
+    return value && value.match(/[0-9]/) != null;
 }

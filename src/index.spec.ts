@@ -38,6 +38,9 @@ describe('Masker', () => {
     });
 
     it('should be able to handle optional chars', function() {
+        chai.expect(jsMasker('?999', '12')).to.equal('12');
+        chai.expect(jsMasker('?999', '12345')).to.equal('123');
+
         chai.expect(jsMasker('(99) 9999?9-9999', '1234567890')).to.equal('(12) 3456-7890');
         chai.expect(jsMasker('(99) 9?9999-9999', '1234567890')).to.equal('(12) 3456-7890');
         chai.expect(jsMasker('(99) 9999?9-9999', '12345678901')).to.equal('(12) 34567-8901');
@@ -52,5 +55,11 @@ describe('Masker', () => {
         chai.expect(jsMasker('(99) ?999?99-9999?9', '001234567890')).to.equal('(00) 12345-67890');
         chai.expect(jsMasker('(99) ?999?99-9999?9', '00123456789')).to.equal('(00) 1234-56789');
         chai.expect(jsMasker('(99) 9?99?99-99?999', '0012345678')).to.equal('(00) 123-45678');
+    });
+
+    it('should ignore non digits', function () {
+        chai.expect(jsMasker('(99)9?99?99-99?999', '0A12345678')).to.equal('(01)234-5678');
+        chai.expect(jsMasker('(99)9?99?99-99?999', 'AAA')).to.equal('');
+        chai.expect(jsMasker('(99)9?99?99-99?999', 'AA1A')).to.equal('(1');
     });
 });
