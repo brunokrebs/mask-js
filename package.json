@@ -1,14 +1,29 @@
 {
-  "name": "js-masker",
+  "name": "mask-js",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "./dist/index.js",
+  "directories": {
+    "test": "tests"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha -r ts-node/register tests/**/*.spec.ts",
+    "prepublishOnly": "tsc -p ./ --outDir dist/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/brunokrebs/mask-js.git"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": {
+    "name" : "Bruno Krebs",
+    "email" : "krebs.bruno@gmail.com",
+    "url" : "https://twitter.com/brunoskrebs/"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/brunokrebs/mask-js/issues"
+  },
   "devDependencies": {
     "@types/chai": "^4.0.8",
     "@types/mocha": "^2.2.44",
