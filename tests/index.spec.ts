@@ -1,5 +1,5 @@
 import * as chai from 'chai';
-import jsMasker from './index';
+import jsMasker from '../src/index';
 
 describe('Masker', () => {
   it('should be able to import jsMasker', function () {
