@@ -1,7 +1,7 @@
 import * as chai from 'chai';
-import maskJs from '../src/index';
+import {maskJs, maskCurrency} from '../src/index';
 
-describe('Masker', () => {
+describe('maskJs', () => {
   it('should be able to import maskJs', function () {
     chai.expect(maskJs).to.be.not.null;
     chai.expect(maskJs).to.be.not.undefined;
@@ -62,5 +62,32 @@ describe('Masker', () => {
     chai.expect(maskJs('(99)9?99?99-99?999', '0A12345678')).to.equal('(01)234-5678');
     chai.expect(maskJs('(99)9?99?99-99?999', 'AAA')).to.equal('');
     chai.expect(maskJs('(99)9?99?99-99?999', 'AA1A')).to.equal('(1');
+  });
+});
+
+describe('maskCurrency', () => {
+  it('should be able to mask as money', function () {
+    chai.expect(maskCurrency('1')).to.equal('1');
+    chai.expect(maskCurrency('12')).to.equal('12');
+    chai.expect(maskCurrency('123')).to.equal('1.23');
+    chai.expect(maskCurrency('1234')).to.equal('12.34');
+    chai.expect(maskCurrency('12345')).to.equal('123.45');
+    chai.expect(maskCurrency('123456')).to.equal('1,234.56');
+    chai.expect(maskCurrency('123456789')).to.equal('1,234,567.89');
+    chai.expect(maskCurrency('12345678901234')).to.equal('123,456,789,012.34');
+  });
+
+  it('should be able to ignore non numbers', function () {
+    chai.expect(maskCurrency('a')).to.equal('');
+    chai.expect(maskCurrency(null)).to.equal('');
+    chai.expect(maskCurrency(undefined)).to.equal('');
+    chai.expect(maskCurrency('')).to.equal('');
+    chai.expect(maskCurrency('a1')).to.equal('1');
+    chai.expect(maskCurrency('12a145b6nm7')).to.equal('12,145.67');
+  });
+
+  it('should be able to accept comma as decimal separator', function () {
+    chai.expect(maskCurrency('12a145b6nm7', ',')).to.equal('12.145,67');
+    chai.expect(maskCurrency('123456789', ',')).to.equal('1.234.567,89');
   });
 });

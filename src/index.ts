@@ -1,17 +1,38 @@
-export default maskJs;
+export {
+  maskCurrency, maskJs
+};
 
 const DIGIT = '9';
 const OPTIONAL = '?';
 
+function maskCurrency(value: string, decimalSeparator = '.') {
+  const thousandsSeparator = decimalSeparator == '.' ? ',' : '.';
+  value = value || '';
+  const justNumbers = value.replace(/\D/g,'');
+  const reversedArray = justNumbers.split('').reverse();
+  let result = '';
+  reversedArray.map((char, index) => {
+    if (index == 2) {
+      result = decimalSeparator + result;
+    } else if (index >= 5 && (index + 1) % 3 === 0) {
+      result = thousandsSeparator + result;
+    }
+    result = char + result;
+  });
+  return result;
+}
+
 function maskJs(mask: string, value: string): string {
-  const inputArray = value.split('') || [];
+  value = value || '';
+  const inputArray = value.split('');
   const digitsEntered = inputArray
     .map((char, index) => (isNumber(char) ? 1 : 0))
     .reduce((prev, next) => (prev + next), 0);
   if (digitsEntered == 0) return '';
 
   const inputLength = value.length;
-  const maskArray = mask.split('') || [];
+  mask = mask || '';
+  const maskArray = mask.split('');
   const indexes = maskArray.map((char, index) => (char === OPTIONAL ? index : '')).filter(String);
 
   // counts 9s in the mask
