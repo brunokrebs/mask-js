@@ -5,22 +5,22 @@
 
 ## mask-js
 
-A library that exposes a function that applies masks to parameters. To use it, it's pretty simple. First, we need to 
-install it:
+A library that exposes functions to masks strings. To use it, it's pretty simple. First, you need to install it:
 
 ```bash
 npm i mask-js
 ```
 
-Then we can import its functions and use at will:
+Then, you can import its functions and use at will:
 
 ```javascript
-import maskJs from 'mask-js';
+import {maskJs, maskCurrency} from 'mask-js';
 
-console.log(maskJs('(99) 99', '0123456') === '(01) 23');
+console.log(maskJs('(99) 99', '0123456') === '(01) 23'); // true
+console.log(maskCurrency('12345') === 123.45); // true
 ```
 
-The library already supports optional digits. For example:
+The library also supports optional digits. For example:
 
 ```javascript
 import maskJs from 'mask-js';
