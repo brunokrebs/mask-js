@@ -6,7 +6,7 @@ function maskCurrency(value, decimalSeparator) {
     if (decimalSeparator === void 0) { decimalSeparator = '.'; }
     var thousandsSeparator = decimalSeparator == '.' ? ',' : '.';
     value = value || '';
-    var justNumbers = value.replace(/\D/g, '');
+    var justNumbers = value.toString().replace(/\D/g, '');
     var reversedArray = justNumbers.split('').reverse();
     var result = '';
     reversedArray.map(function (char, index) {
@@ -75,6 +75,13 @@ function maskJs(mask, value) {
 } // preceeded by optional
 exports.maskJs = maskJs;
 function isNumber(value) {
-    return value && value.match(/[0-9]/) != null;
+    return value && value.toString().match(/[0-9]/) != null;
 }
+function showWithCents(value) {
+    if (!value || !isNumber(value)) {
+        return Number(0).toFixed(2).toString();
+    }
+    return maskCurrency(parseFloat(value.toString()).toFixed(2).toString());
+}
+exports.showWithCents = showWithCents;
 //# sourceMappingURL=index.js.map
