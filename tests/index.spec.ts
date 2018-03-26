@@ -1,5 +1,5 @@
 import * as chai from 'chai';
-import {maskJs, maskCurrency} from '../src/index';
+import {maskJs, maskCurrency, showWithCents} from '../src/index';
 
 describe('maskJs', () => {
   it('should be able to import maskJs', function () {
@@ -106,5 +106,19 @@ describe('maskCurrency', () => {
   it('should be able to accept comma as decimal separator', function () {
     chai.expect(maskCurrency('12a145b6nm7', ',')).to.equal('12.145,67');
     chai.expect(maskCurrency('123456789', ',')).to.equal('1.234.567,89');
+  });
+
+  it('should be able to always show cents when asked', function () {
+    chai.expect(showWithCents(null)).to.equal('0.00');
+    chai.expect(showWithCents(0)).to.equal('0.00');
+    chai.expect(showWithCents('0')).to.equal('0.00');
+    chai.expect(showWithCents(0.00)).to.equal('0.00');
+    chai.expect(showWithCents('0.00')).to.equal('0.00');
+    chai.expect(showWithCents('12a145b6nm7')).to.equal('12.00');
+    chai.expect(showWithCents('1234')).to.equal('1,234.00');
+    chai.expect(showWithCents('151234')).to.equal('151,234.00');
+    chai.expect(showWithCents(151234)).to.equal('151,234.00');
+    chai.expect(showWithCents('151234.35')).to.equal('151,234.35');
+    chai.expect(showWithCents(151234.35)).to.equal('151,234.35');
   });
 });

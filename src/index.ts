@@ -1,5 +1,5 @@
 export {
-  maskCurrency, maskJs
+  maskCurrency, maskJs, showWithCents,
 };
 
 const DIGIT = '9';
@@ -78,5 +78,12 @@ function maskJs(mask: string, value: string): string {
 } // preceeded by optional
 
 function isNumber(value) {
-  return value && value.match(/[0-9]/) != null;
+  return value && value.toString().match(/[0-9]/) != null;
+}
+
+function showWithCents(value: number | string): string {
+  if (!value || !isNumber(value)) {
+    return Number(0).toFixed(2).toString();
+  }
+  return maskCurrency(parseFloat(value.toString()).toFixed(2).toString());
 }
