@@ -5,10 +5,10 @@ export {
 const DIGIT = '9';
 const OPTIONAL = '?';
 
-function maskCurrency(value: string, decimalSeparator = '.'): string {
+function maskCurrency(value: string | number, decimalSeparator = '.'): string {
   const thousandsSeparator = decimalSeparator == '.' ? ',' : '.';
   value = value || '';
-  const justNumbers = value.replace(/\D/g,'');
+  const justNumbers = value.toString().replace(/\D/g,'');
   const reversedArray = justNumbers.split('').reverse();
   let result = '';
   reversedArray.map((char, index) => {

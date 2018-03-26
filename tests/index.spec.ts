@@ -82,6 +82,18 @@ describe('maskCurrency', () => {
     chai.expect(maskCurrency('12345678901234')).to.equal('123,456,789,012.34');
   });
 
+  it('should be able to mask numbers', function () {
+    chai.expect(maskCurrency(null)).to.equal('');
+    chai.expect(maskCurrency(1)).to.equal('1');
+    chai.expect(maskCurrency(12)).to.equal('12');
+    chai.expect(maskCurrency(123)).to.equal('1.23');
+    chai.expect(maskCurrency(1234)).to.equal('12.34');
+    chai.expect(maskCurrency(12345)).to.equal('123.45');
+    chai.expect(maskCurrency(123456)).to.equal('1,234.56');
+    chai.expect(maskCurrency(123456789)).to.equal('1,234,567.89');
+    chai.expect(maskCurrency(12345678901234)).to.equal('123,456,789,012.34');
+  });
+
   it('should be able to ignore non numbers', function () {
     chai.expect(maskCurrency('a')).to.equal('');
     chai.expect(maskCurrency(null)).to.equal('');
