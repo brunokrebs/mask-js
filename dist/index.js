@@ -2,11 +2,20 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var DIGIT = '9';
 var OPTIONAL = '?';
-function maskCurrency(value, decimalSeparator) {
+var isFloat = function (value) { return (Number(value) === value && value % 1 !== 0); };
+var decimalPlaces = function (value) { return ((value.toString().split('.')[1] || []).length); };
+function maskCurrency(value, decimalSeparator, twoDecimalPlaces) {
     if (decimalSeparator === void 0) { decimalSeparator = '.'; }
+    if (twoDecimalPlaces === void 0) { twoDecimalPlaces = false; }
     var thousandsSeparator = decimalSeparator == '.' ? ',' : '.';
     value = value || '';
     var justNumbers = value.toString().replace(/\D/g, '');
+    if (isFloat(value)) {
+        justNumbers = (Number(value)
+            .toFixed(2))
+            .toString()
+            .replace(/\D/g, '');
+    }
     var reversedArray = justNumbers.split('').reverse();
     var result = '';
     reversedArray.map(function (char, index) {
@@ -18,6 +27,9 @@ function maskCurrency(value, decimalSeparator) {
         }
         result = char + result;
     });
+    if (!twoDecimalPlaces && decimalPlaces(result) === 2 && result.substring(result.length - 1, result.length) === '0') {
+        return result.substring(0, result.length - 1);
+    }
     return result;
 }
 exports.maskCurrency = maskCurrency;
@@ -81,7 +93,7 @@ function showWithCents(value) {
     if (!value || !isNumber(value)) {
         return Number(0).toFixed(2).toString();
     }
-    return maskCurrency(parseFloat(value.toString()).toFixed(2).toString());
+    return maskCurrency(parseFloat(value.toString()).toFixed(2).toString(), '.', true);
 }
 exports.showWithCents = showWithCents;
 //# sourceMappingURL=index.js.map

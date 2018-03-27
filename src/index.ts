@@ -5,10 +5,22 @@ export {
 const DIGIT = '9';
 const OPTIONAL = '?';
 
-function maskCurrency(value: string | number, decimalSeparator = '.'): string {
+const isFloat = (value) => (Number(value) === value && value % 1 !== 0);
+
+const decimalPlaces = (value) => ((value.toString().split('.')[1] || []).length);
+
+function maskCurrency(value: string | number, decimalSeparator = '.', twoDecimalPlaces = false): string {
   const thousandsSeparator = decimalSeparator == '.' ? ',' : '.';
   value = value || '';
-  const justNumbers = value.toString().replace(/\D/g,'');
+  let justNumbers = value.toString().replace(/\D/g,'');
+
+  if (isFloat(value)) {
+    justNumbers = (Number(value)
+      .toFixed(2))
+      .toString()
+      .replace(/\D/g,'');
+  }
+
   const reversedArray = justNumbers.split('').reverse();
   let result = '';
   reversedArray.map((char, index) => {
@@ -19,6 +31,11 @@ function maskCurrency(value: string | number, decimalSeparator = '.'): string {
     }
     result = char + result;
   });
+
+  if (!twoDecimalPlaces && decimalPlaces(result) === 2 && result.substring(result.length - 1, result.length) === '0') {
+    return result.substring(0, result.length - 1)
+  }
+
   return result;
 }
 
@@ -85,5 +102,5 @@ function showWithCents(value: number | string): string {
   if (!value || !isNumber(value)) {
     return Number(0).toFixed(2).toString();
   }
-  return maskCurrency(parseFloat(value.toString()).toFixed(2).toString());
+  return maskCurrency(parseFloat(value.toString()).toFixed(2).toString(), '.', true);
 }
