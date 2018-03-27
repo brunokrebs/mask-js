@@ -1,44 +1,17 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+var currency_1 = require("./currency");
+exports.maskCurrency = currency_1.default;
+var util_1 = require("./util");
+exports.removeNonDigits = util_1.removeNonDigits;
 var DIGIT = '9';
 var OPTIONAL = '?';
-var isFloat = function (value) { return (Number(value) === value && value % 1 !== 0); };
-var decimalPlaces = function (value) { return ((value.toString().split('.')[1] || []).length); };
-function maskCurrency(value, decimalSeparator, twoDecimalPlaces) {
-    if (decimalSeparator === void 0) { decimalSeparator = '.'; }
-    if (twoDecimalPlaces === void 0) { twoDecimalPlaces = false; }
-    var thousandsSeparator = decimalSeparator == '.' ? ',' : '.';
-    value = value || '';
-    var justNumbers = value.toString().replace(/\D/g, '');
-    if (isFloat(value)) {
-        justNumbers = (Number(value)
-            .toFixed(2))
-            .toString()
-            .replace(/\D/g, '');
-    }
-    var reversedArray = justNumbers.split('').reverse();
-    var result = '';
-    reversedArray.map(function (char, index) {
-        if (index == 2) {
-            result = decimalSeparator + result;
-        }
-        else if (index >= 5 && (index + 1) % 3 === 0) {
-            result = thousandsSeparator + result;
-        }
-        result = char + result;
-    });
-    if (!twoDecimalPlaces && decimalPlaces(result) === 2 && result.substring(result.length - 1, result.length) === '0') {
-        return result.substring(0, result.length - 1);
-    }
-    return result;
-}
-exports.maskCurrency = maskCurrency;
 function maskJs(mask, value) {
     value = (value || '');
     var justNumbers = value.replace(/\D/g, '');
     var inputArray = justNumbers.split('');
     var digitsEntered = inputArray
-        .map(function (char, index) { return (isNumber(char) ? 1 : 0); })
+        .map(function (char, index) { return (util_1.isNumber(char) ? 1 : 0); })
         .reduce(function (prev, next) { return (prev + next); }, 0);
     if (digitsEntered == 0)
         return '';
@@ -67,16 +40,16 @@ function maskJs(mask, value) {
             return;
         }
         if (char === DIGIT && inputLength > nextElement) {
-            var isNum = isNumber(justNumbers[nextElement]);
+            var isNum = util_1.isNumber(justNumbers[nextElement]);
             if (isNum) {
                 maskedValue[index] = justNumbers[nextElement];
                 nextElement++;
                 return;
             }
-            while (inputLength > nextElement && !isNumber(justNumbers[nextElement])) {
+            while (inputLength > nextElement && !util_1.isNumber(justNumbers[nextElement])) {
                 nextElement++;
             }
-            maskedValue[index] = isNumber(justNumbers[nextElement]) ? justNumbers[nextElement] : '';
+            maskedValue[index] = util_1.isNumber(justNumbers[nextElement]) ? justNumbers[nextElement] : '';
             nextElement++;
         }
         else if (inputLength <= nextElement) {
@@ -84,16 +57,6 @@ function maskJs(mask, value) {
         }
     });
     return maskedValue.join("");
-} // preceeded by optional
+}
 exports.maskJs = maskJs;
-function isNumber(value) {
-    return value && value.toString().match(/[0-9]/) != null;
-}
-function showWithCents(value) {
-    if (!value || !isNumber(value)) {
-        return Number(0).toFixed(2).toString();
-    }
-    return maskCurrency(parseFloat(value.toString()).toFixed(2).toString(), '.', true);
-}
-exports.showWithCents = showWithCents;
 //# sourceMappingURL=index.js.map
