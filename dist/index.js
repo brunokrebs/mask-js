@@ -2,6 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var currency_1 = require("./currency");
 exports.maskCurrency = currency_1.default;
+var date_1 = require("./date");
+exports.maskDate = date_1.default;
 var util_1 = require("./util");
 exports.removeNonDigits = util_1.removeNonDigits;
 var DIGIT = '9';

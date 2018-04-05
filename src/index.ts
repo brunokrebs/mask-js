@@ -1,8 +1,9 @@
 import maskCurrency from './currency';
+import maskDate from './date';
 import {isNumber, removeNonDigits} from './util';
 
 export {
-  maskJs, maskCurrency, removeNonDigits,
+  maskJs, maskCurrency, removeNonDigits, maskDate,
 };
 
 const DIGIT = '9';
